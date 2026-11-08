@@ -34,6 +34,7 @@ prompt
 compile_commands.json
 .cache
 tools/paths.ps1
+tools/rpfm/
 config.ld.*.generated
 todo.md
 __pycache__/

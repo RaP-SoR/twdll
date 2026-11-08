@@ -1,30 +1,44 @@
 #include "../common/tw.h"
 
+#include <string>
+
 extern const char* GAME_NAME;
 
 /// @module twdll.core
-/// Utility functions for the Rome 2 dummy build.
+/// Utility functions for the Rome 2 build.
 /// Gameplay methods are registered only after their signatures are confirmed.
 
 #ifndef TWDLL_BUILD_SHA
 #define TWDLL_BUILD_SHA "unknown"
 #endif
 
-/// Log a single string to `twdll.log`.
-/// One string only: the multi-argument `tostring` path needs `lua_getfield`,
-/// `lua_type`, `lua_pushvalue`, and `lua_settop`, which are not in the Rome 2
-/// signature list yet.
+/// Log a message or arbitrary values to `twdll.log`.
+/// Accepts any number of arguments of any type, converting them via Lua tostring.
 /// @function Log
-/// @tparam string message text to write
+/// @tparam any ... values to log
 /// @usage
-/// twdll.core.Log("Campaign script loaded")
+/// twdll.core.Log("Campaign initialized. Turn:", 1, "Faction:", faction:name())
 static int script_Log(lua_State* L) {
-    if (!g_game_luaL_checklstring) {
-        Log("[twdll] Log: luaL_checklstring is not resolved");
+    if (!g_game_lua_type || !g_game_lua_getfield || !g_game_lua_pushvalue ||
+        !g_game_lua_pcall || !g_game_luaL_checklstring || !g_game_lua_settop) {
+        Log("[twdll] Log: required Lua C API signatures are not resolved");
         return 0;
     }
-    const char* msg = l_checklstring(L, 1, nullptr);
-    Log("%s", msg ? msg : "");
+
+    std::string full_msg;
+    for (int i = 1; l_type(L, i) != LUA_TNONE; ++i) {
+        if (i > 1) full_msg += "\t";
+        l_getfield(L, LUA_GLOBALSINDEX, "tostring");
+        l_pushvalue(L, i);
+        if (l_pcall(L, 1, 1, 0) == 0) {
+            if (const char* s = l_checklstring(L, -1, nullptr))
+                full_msg += s;
+            l_pop(L, 1);
+        } else {
+            l_pop(L, 1);
+        }
+    }
+    Log("%s", full_msg.c_str());
     return 0;
 }
 

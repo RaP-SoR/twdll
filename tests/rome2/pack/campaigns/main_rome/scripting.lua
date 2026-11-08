@@ -2838,38 +2838,45 @@ scripting.AddEventCallBack("ComponentLClickUp", OnComponentLClickUp)
 
 scripting.AddEventCallBack("TimeTrigger", OnTimeTrigger)
 
-require "lua_scripts.Campaign_Script_Header";
-campaign_name = get_folder_name_and_shortform();
-package.path = package.path .. ";data/campaigns/" .. campaign_name .. "/?.lua" .. 'shared';
+-- twdll Rome 2 dummy: load DLL from the game root and run the smoke suite.
+package.path = package.path .. ";./?.lua;./?/?.lua;shared/?.lua;?/?.lua;data/?.lua;data/?/?.lua"
 
-local function load_twdll()
-    -- Load the DLL (it should be in the game root as twdll.dll)
-    local path = "twdll"
-    local func, load_err = package.loadlib(path, "luaopen_twdll")
-    
+local function append_twdll_log(msg)
     local f = io.open("twdll.log", "a")
     if f then
-        if not func then
-            f:write("[LUA] FATAL: Failed to load twdll DLL. Reason: " .. tostring(load_err) .. "\n")
-        else
-            local ok, call_err = pcall(function()
-                twdll = func()
-            end)
-            if ok then
-                f:write("[LUA] twdll loaded successfully\n")
-            else
-                f:write("[LUA] FATAL: Error during luaopen_twdll execution: " .. tostring(call_err) .. "\n")
-            end
-        end
+        f:write(tostring(msg) .. "\n")
         f:close()
     end
 end
 
-load_twdll()
+local function load_twdll()
+    local path = "twdll"
+    local func, load_err = package.loadlib(path, "luaopen_twdll")
+    if not func then
+        append_twdll_log("[LUA] FATAL: Failed to load twdll DLL. Reason: " .. tostring(load_err))
+        return false
+    end
 
--- Load shared testing logic
-local _, err = pcall(function()
-    require "shared.testing"
-end)
+    local ok, call_err = pcall(function()
+        twdll = func()
+    end)
+    if not ok then
+        append_twdll_log("[LUA] FATAL: Error during luaopen_twdll execution: " .. tostring(call_err))
+        return false
+    end
 
-twdll.Log(err)
+    append_twdll_log("[LUA] twdll loaded successfully")
+    return type(twdll) == "table"
+end
+
+if load_twdll() then
+    local ok_smoke, err_smoke = pcall(function()
+        require "shared.rome2_smoke"
+    end)
+    if not ok_smoke then
+        append_twdll_log("[LUA] Error loading shared.rome2_smoke: " .. tostring(err_smoke))
+        if type(twdll) == "table" and type(twdll.core) == "table" and type(twdll.core.Log) == "function" then
+            twdll.core.Log("[TEST] Error loading shared.rome2_smoke: " .. tostring(err_smoke))
+        end
+    end
+end

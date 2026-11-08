@@ -127,7 +127,12 @@ function Install-Test {
     }
 
     $ConsulPack = if ($Game -eq "rome2") { "consulscriptum.pack" } else { "consulscriptum_attila.pack" }
-    $s = "mod `"$TestPackName`";`nmod `"twdll.pack`";`nmod `"$ConsulPack`";$ExtraModLine`ngame_startup_mode campaign_load `"tests.save`";"
+    $ConsulLine = ""
+    if (Test-Path (Join-Path $DataDir $ConsulPack)) {
+        $ConsulLine = "`nmod `"$ConsulPack`";"
+    }
+
+    $s = "mod `"$TestPackName`";`nmod `"twdll.pack`";$ConsulLine$ExtraModLine`ngame_startup_mode campaign_load `"tests.save`";"
 
     Set-Content -Path (Join-Path $ScriptDir "user.script.txt") -Value $s
     Write-Host "Test env installed for $Game"

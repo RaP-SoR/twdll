@@ -40,8 +40,8 @@ twdll.core.GameBuild()
 ## Documentation
 - [Online API Documentation](https://bukowa.github.io/twdll/)
 
-> **This branch is the Rome 2 dummy.** `twdll.core.Log` takes one string. Gameplay methods are
-> added only after their byte signatures are confirmed in `empire.retail.dll`. The Attila line
+> **This branch targets Rome 2.** `twdll.core.Log` accepts any number of values. Gameplay methods
+> are added only after their byte signatures are confirmed in `empire.retail.dll`. The Attila line
 > stays on `master`.
 
 ## Disclaimer: AI-Assisted & Vibe-Coded

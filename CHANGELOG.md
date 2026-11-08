@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Resolved the remaining Lua C API entry points used by `twdll.core` (`lua_getfield`, `lua_type`, `lua_settop`, `lua_pushboolean`, `lua_pushvalue`) against Rome 2's `empire.retail.dll`.
+
 ### Changed
-- This branch targets Total War: Rome 2. The DLL scans Lua C API signatures in `empire.retail.dll` and registers `twdll.core.Log(message)`, `twdll.core.GameBuild()`, and `twdll.core.GetBuildSha()`. `Log` takes a single string.
+- This branch targets Total War: Rome 2. The DLL scans Lua C API signatures in `empire.retail.dll` and registers `twdll.core.Log(...)`, `twdll.core.GameBuild()`, and `twdll.core.GetBuildSha()`. `Log` accepts any number of values (converted via Lua `tostring`).
 
 ### Removed
 - Attila gameplay modules are not part of this branch.
