@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>twdll Lua API</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>twdll</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>twdll.core</strong></li>
+  <li><a href="../modules/FACTION_SCRIPT_INTERFACE.html">FACTION_SCRIPT_INTERFACE</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>twdll.core</code></h1>
+<p>
+
+</p>
+<p> Utility functions for the Rome 2 build.
+ Gameplay methods are registered only after their signatures are confirmed.</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#GameBuild">GameBuild ()</a></td>
+	<td class="summary">Returns the target game build name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetBuildSha">GetBuildSha ()</a></td>
+	<td class="summary">Returns the git commit SHA hash from which the DLL was compiled.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#Log">Log (...)</a></td>
+	<td class="summary">Log a message or arbitrary values to <code>twdll.log</code>.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ProbeScriptInterfaces">ProbeScriptInterfaces ()</a></td>
+	<td class="summary">Probe whether known CA script-interface metatables exist in the Lua registry.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "GameBuild"></a>
+    <strong>GameBuild ()</strong>
+    </dt>
+    <dd>
+    Returns the target game build name.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        game name, <code>&quot;Rome2&quot;</code> on this branch
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> game_name = twdll.core.<span class="function-name">GameBuild</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "GetBuildSha"></a>
+    <strong>GetBuildSha ()</strong>
+    </dt>
+    <dd>
+    Returns the git commit SHA hash from which the DLL was compiled.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        git commit SHA, or <code>&quot;unknown&quot;</code> when git was unavailable at build time
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> sha = twdll.core.<span class="function-name">GetBuildSha</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "Log"></a>
+    <strong>Log (...)</strong>
+    </dt>
+    <dd>
+    Log a message or arbitrary values to <code>twdll.log</code>.
+ Accepts any number of arguments of any type, converting them via Lua tostring.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+            <span class="types"><span class="type">any</span></span>
+         values to log
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">twdll.core.<span class="function-name">Log</span>(<span class="string">"Campaign initialized. Turn:"</span>, <span class="number">1</span>, <span class="string">"Faction:"</span>, faction:<span class="function-name">name</span>())</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "ProbeScriptInterfaces"></a>
+    <strong>ProbeScriptInterfaces ()</strong>
+    </dt>
+    <dd>
+    Probe whether known CA script-interface metatables exist in the Lua registry.
+ Read-only: does not create metatables or attach methods. Call after the campaign
+ script environment is up (metatable registration is done by the engine).
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        map of interface name -> boolean (<code>true</code> if metatable and <code>__index</code> table exist)
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> hits = twdll.core.<span class="function-name">ProbeScriptInterfaces</span>()
+<span class="keyword">if</span> hits.FACTION_SCRIPT_INTERFACE <span class="keyword">then</span> twdll.core.<span class="function-name">Log</span>(<span class="string">"faction metatable ready"</span>) <span class="keyword">end</span></pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/ldoc">LDoc 1.5.0</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

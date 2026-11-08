@@ -40,6 +40,7 @@ if(TW_GAME STREQUAL "attila")
 elseif(TW_GAME STREQUAL "rome2")
     set(TWDLL_DOC_SOURCES
         "${PROJECT_SOURCE_DIR}/src/rome2/core.cpp"
+        "${PROJECT_SOURCE_DIR}/src/rome2/faction.cpp"
     )
 endif()
 
