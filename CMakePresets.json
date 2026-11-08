@@ -78,6 +78,11 @@
   ],
   "buildPresets": [
     {
+      "name": "rome2",
+      "configurePreset": "rome2",
+      "targets": ["twdll"]
+    },
+    {
       "name": "attila",
       "configurePreset": "attila",
       "targets": ["twdll"]

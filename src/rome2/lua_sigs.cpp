@@ -52,6 +52,3 @@ extern const TW_SignatureInfo g_signatures[] = {
     {"luaB_loadstring",  (void**)&g_game_luaB_loadstring,   LUAB_LOADSTRING_SIG},
     {nullptr, nullptr, nullptr}
 };
-
-extern const uintptr_t OFFSET_MAX_UNITS_ARMY = 0x193FC68;
-extern const uintptr_t OFFSET_MAX_UNITS_NAVY = 0x193FC6C;

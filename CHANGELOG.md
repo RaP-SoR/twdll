@@ -4,12 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-### Added
-- Extended the game's military force interface (`MILITARY_FORCE_SCRIPT_INTERFACE`) with `AppointCharacter(character, [options])` — assigns a character as the commanding general of the army, creating their bodyguard unit (supports `{ bodyguard_key = string }`) and returning the previous general to the faction court.
-- Added `twdll.battle.EnableSmeHealthBars([enabled=true])` — updates health bars on unit cards and 3D banners in real time for 1-man units (SMEs, monsters, single heroes) based on remaining hit points.
+### Changed
+- This branch targets Total War: Rome 2. The DLL scans Lua C API signatures in `empire.retail.dll` and registers `twdll.core.Log(message)`, `twdll.core.GameBuild()`, and `twdll.core.GetBuildSha()`. `Log` takes a single string.
 
-### Fixed
-- Fixed `twdll.tweakers.SetInt(name, val)` returning `true` when setting non-existent tweaker names, properly returning `false` on unresolved names matching `SetFloat` and `SetBool`.
+### Removed
+- Attila gameplay modules are not part of this branch.
 
 ## [0.10.0] - 2026-08-23
 

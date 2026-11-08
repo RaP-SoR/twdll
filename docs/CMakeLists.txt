@@ -39,12 +39,7 @@ if(TW_GAME STREQUAL "attila")
     )
 elseif(TW_GAME STREQUAL "rome2")
     set(TWDLL_DOC_SOURCES
-        "${PROJECT_SOURCE_DIR}/src/main.cpp"
-        "${PROJECT_SOURCE_DIR}/src/common/lua_core.cpp"
-        "${PROJECT_SOURCE_DIR}/src/rome2/faction.cpp"
-        "${PROJECT_SOURCE_DIR}/src/rome2/unit.cpp"
-        "${PROJECT_SOURCE_DIR}/src/rome2/world.cpp"
-        "${PROJECT_SOURCE_DIR}/src/rome2/campaign_ui.cpp"
+        "${PROJECT_SOURCE_DIR}/src/rome2/core.cpp"
     )
 endif()
 

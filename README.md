@@ -6,12 +6,12 @@
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-Join%20Chat-5865F2?logo=discord&logoColor=white)](https://discord.gg/6vm2M94vhX)
 
-Run custom C++ code inside Total War: Attila's Lua engine. (Rome 2 support is frozen.)
+Run custom C++ code inside Total War: Rome 2's Lua engine. This branch is a dummy: it scans Lua C API signatures in `empire.retail.dll` and registers `twdll.core`.
 
 ## Installation
 
 1. Download the latest development build: [**`libtwdll-nightly.zip`**](https://github.com/bukowa/twdll/releases/download/nightly/libtwdll-nightly.zip) (or check all releases on the [Dev Build page](https://github.com/bukowa/twdll/releases/tag/nightly))
-2. Extract `twdll_attila.dll` into your Total War: Attila game root directory (where `Attila.exe` is located)
+2. Copy the built `twdll.dll` into your Total War: Rome 2 game root directory (where `Rome2.exe` is located)
 3. The DLL is active and ready to be loaded by your mod script
 
 ## Usage
@@ -19,10 +19,10 @@ Run custom C++ code inside Total War: Attila's Lua engine. (Rome 2 support is fr
 Load the DLL in your Lua script:
 
 ```lua
-twdll = package.loadlib("twdll_attila.dll", "luaopen_twdll")()
+twdll = package.loadlib("twdll.dll", "luaopen_twdll")()
 
--- Use the API
 twdll.core.Log("Hello from C++!")
+twdll.core.GameBuild()
 ```
 
 > **Where to load twdll**
@@ -40,9 +40,9 @@ twdll.core.Log("Hello from C++!")
 ## Documentation
 - [Online API Documentation](https://bukowa.github.io/twdll/)
 
-> **Rome 2 support is frozen.** No code, build, or docs changes are actively made for Rome 2 —
-> the `src/rome2/`, `tests/rome2/`, and `docs/rome2/` trees are preserved as-is. Active development,
-> releases, and documentation target Attila only.
+> **This branch is the Rome 2 dummy.** `twdll.core.Log` takes one string. Gameplay methods are
+> added only after their byte signatures are confirmed in `empire.retail.dll`. The Attila line
+> stays on `master`.
 
 ## Disclaimer: AI-Assisted & Vibe-Coded
 
@@ -64,9 +64,9 @@ twdll.core.Log("Hello from C++!")
 
 #### Build
 ```sh
-# Configure & build for Attila (active)
-cmake --preset attila
-cmake --build --preset attila
+# Configure & build for Rome 2
+cmake --preset rome2
+cmake --build --preset rome2
 ```
 
 ---
@@ -90,7 +90,7 @@ xwin --accept-license --arch x86 splat --output ~/xwin
 cmake -S . -B build -G Ninja \
   --toolchain cmake/clang-cross-x86.cmake \
   -DCMAKE_BUILD_TYPE=Release \
-  -DTW_GAME=attila
+  -DTW_GAME=rome2
 
 cmake --build build --target twdll
 ```
@@ -101,14 +101,13 @@ cmake --build build --target twdll
 src/
 ├── main.cpp              # DLL entry point
 ├── common/               # Shared utilities
-├── attila/               # Attila specific code (active)
-└── rome2/                # Rome 2 specific code (frozen)
+└── rome2/                # Rome 2 dummy: signatures, host check, twdll.core
 ```
 
 ## Contributing
 
-twdll works by injecting C++ into Attila's Lua engine: it finds game functions and
-structs by byte-signature scanning and fixed offsets, then hooks them at runtime. Most
+twdll works by injecting C++ into Rome 2's Lua engine: it finds game functions and
+structs by byte-signature scanning `empire.retail.dll`, then hooks them at runtime. Most
 contribution work is reverse-engineering the game to map out what to hook.
 
 ### The Linux build is your best reverse-engineering aid

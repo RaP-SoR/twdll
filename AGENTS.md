@@ -1,11 +1,11 @@
 # twdll — Agent Conventions
 
-**twdll** is a script extender that injects C++ logic into Total War: Attila's Lua engine.
+**twdll** is a script extender that injects C++ logic into Total War's Lua engine.
 It is a **32-bit MSVC DLL** loaded in-process by the game.
 
-> **Rome 2 support is inactive.** Files under `src/rome2/`, `tests/rome2/`, and `docs/rome2/`
-> are preserved but not maintained. All active development targets **Attila only**. Do not
-> modify `rome2/` without explicit intent to resume that target.
+> **This branch (`rome2`) targets Total War: Rome 2 only.** Attila sources were removed so
+> pattern scans and new methods land in `src/rome2/` against `empire.retail.dll`. Upstream
+> `master` remains the Attila line. Do not merge this branch back into `master`.
 
 This document describes **conventions**, not the current code layout. Read the source for the
 up-to-date file/function names; keep the rules here whenever they change.

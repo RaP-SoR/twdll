@@ -49,6 +49,21 @@ local function run_twdll_tests()
         os.remove(marker_file)
     end
 
+    if type(twdll) == "table" and type(twdll.core) == "table" and type(twdll.core.GameBuild) == "function" and twdll.core.GameBuild() == "Rome2" then
+        twdll.core.Log("[TEST] Rome 2 dummy core")
+        local sha = type(twdll.core.GetBuildSha) == "function" and twdll.core.GetBuildSha() or ""
+        local passed = type(twdll.core.Log) == "function" and type(sha) == "string" and #sha > 0
+        if passed then
+            twdll.core.Log("[TEST] GameBuild=Rome2")
+            twdll.core.Log("[TEST] GetBuildSha=" .. sha)
+            twdll.core.Log("[TEST] PASSED: 3 FAILED: 0 SKIPPED: 0")
+        else
+            twdll.core.Log("[TEST] PASSED: 0 FAILED: 1 SKIPPED: 0")
+            twdll.core.Log("[TEST] FAILED: rome2 core dummy")
+        end
+        return
+    end
+
     if is_reload then
         if type(twdll) == "table" and type(twdll.core) == "table" and type(twdll.core.Log) == "function" then
             twdll.core.Log("\n======================================================")

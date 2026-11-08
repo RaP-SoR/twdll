@@ -1,11 +1,12 @@
-#include "attila/security.h"
+#include "rome2/security.h"
+
 #include <windows.h>
-#include <string>
 #include <algorithm>
 #include <cctype>
+#include <string>
 
 bool is_valid_game_host() {
-    char exe_path[MAX_PATH] = {0};
+    char exe_path[MAX_PATH] = {};
     if (GetModuleFileNameA(NULL, exe_path, MAX_PATH) == 0) {
         return false;
     }
@@ -15,7 +16,7 @@ bool is_valid_game_host() {
         return static_cast<char>(std::tolower(c));
     });
 
-    if (path_lower.find("attila.exe") == std::string::npos) {
+    if (path_lower.find("rome2.exe") == std::string::npos) {
         return false;
     }
 

@@ -19,19 +19,26 @@ set_property(CACHE TW_GAME PROPERTY STRINGS rome2 attila)
 message(STATUS "Building for game: ${TW_GAME}")
 
 # ── Source files ──────────────────────────────────────────────────────────────
-# Common sources shared across all games
+# This branch builds the Rome 2 dummy only. Attila sources are not in the tree.
+if(NOT TW_GAME STREQUAL "rome2")
+    message(FATAL_ERROR "This branch builds Rome 2 only (TW_GAME=rome2). Attila sources were removed.")
+endif()
+
 set(TWDLL_COMMON_SOURCES
     src/main.cpp
     src/twdll.rc
     src/common/log.cpp
     src/common/lua_api.cpp
-    src/common/lua_core.cpp
     src/common/game_api.cpp
     src/common/signature_scanner.cpp
 )
 
-# Game-specific sources (struct layouts, Lua signatures)
-file(GLOB_RECURSE TWDLL_GAME_SOURCES CONFIGURE_DEPENDS "src/${TW_GAME}/*.cpp")
+set(TWDLL_GAME_SOURCES
+    src/rome2/core.cpp
+    src/rome2/game_sigs.cpp
+    src/rome2/lua_sigs.cpp
+    src/rome2/security.cpp
+)
 
 # ── Library target ────────────────────────────────────────────────────────────
 add_library(twdll SHARED
