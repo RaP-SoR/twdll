@@ -55,4 +55,21 @@ local multi_ok = pcall(function()
 end)
 assert_true("multi-arg Log", multi_ok)
 
+assert_true("ProbeScriptInterfaces", type(twdll.core.ProbeScriptInterfaces) == "function")
+local hits = nil
+local probe_ok, probe_err = pcall(function()
+    hits = twdll.core.ProbeScriptInterfaces()
+end)
+assert_true("ProbeScriptInterfaces call", probe_ok)
+if not probe_ok then
+    log("[TEST] ProbeScriptInterfaces error: " .. tostring(probe_err))
+end
+assert_true("ProbeScriptInterfaces table", type(hits) == "table")
+if type(hits) == "table" then
+    assert_true("FACTION_SCRIPT_INTERFACE", hits.FACTION_SCRIPT_INTERFACE == true)
+    assert_true("CHARACTER_SCRIPT_INTERFACE", hits.CHARACTER_SCRIPT_INTERFACE == true)
+    assert_true("UNIT_SCRIPT_INTERFACE", hits.UNIT_SCRIPT_INTERFACE == true)
+    assert_true("MILITARY_FORCE_SCRIPT_INTERFACE", hits.MILITARY_FORCE_SCRIPT_INTERFACE == true)
+end
+
 log(string.format("[TEST] PASSED: %d FAILED: %d SKIPPED: 0", passed, failed))

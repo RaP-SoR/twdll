@@ -65,6 +65,10 @@
 	<td class="name" nowrap><a href="#Log">Log (...)</a></td>
 	<td class="summary">Log a message or arbitrary values to <code>twdll.log</code>.</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#ProbeScriptInterfaces">ProbeScriptInterfaces ()</a></td>
+	<td class="summary">Probe whether known CA script-interface metatables exist in the Lua registry.</td>
+	</tr>
 </table>
 
 <br/>
@@ -145,6 +149,33 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example">twdll.core.<span class="function-name">Log</span>(<span class="string">"Campaign initialized. Turn:"</span>, <span class="number">1</span>, <span class="string">"Faction:"</span>, faction:<span class="function-name">name</span>())</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "ProbeScriptInterfaces"></a>
+    <strong>ProbeScriptInterfaces ()</strong>
+    </dt>
+    <dd>
+    Probe whether known CA script-interface metatables exist in the Lua registry.
+ Read-only: does not create metatables or attach methods. Call after the campaign
+ script environment is up (metatable registration is done by the engine).
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        map of interface name -> boolean (<code>true</code> if metatable and <code>__index</code> table exist)
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> hits = twdll.core.<span class="function-name">ProbeScriptInterfaces</span>()
+<span class="keyword">if</span> hits.FACTION_SCRIPT_INTERFACE <span class="keyword">then</span> twdll.core.<span class="function-name">Log</span>(<span class="string">"faction metatable ready"</span>) <span class="keyword">end</span></pre>
     </ul>
 
 </dd>

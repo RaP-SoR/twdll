@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Resolved the remaining Lua C API entry points used by `twdll.core` (`lua_getfield`, `lua_type`, `lua_settop`, `lua_pushboolean`, `lua_pushvalue`) against Rome 2's `empire.retail.dll`.
+- Added `twdll.core.ProbeScriptInterfaces()` — returns a name→boolean table for known CA script-interface metatables in the Lua registry (`FACTION_SCRIPT_INTERFACE`, `CHARACTER_SCRIPT_INTERFACE`, and others) without creating or modifying them.
 
 ### Changed
 - This branch targets Total War: Rome 2. The DLL scans Lua C API signatures in `empire.retail.dll` and registers `twdll.core.Log(...)`, `twdll.core.GameBuild()`, and `twdll.core.GetBuildSha()`. `Log` accepts any number of values (converted via Lua `tostring`).
