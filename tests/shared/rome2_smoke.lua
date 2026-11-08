@@ -131,6 +131,87 @@ local function run_faction_tests()
     assert_true("SetGold restored", faction:GetGold() == original)
 
     summarize("FACTION")
+    return faction
+end
+
+local function run_unit_tests(faction)
+    log("[TEST] Rome 2 smoke (UICreated / unit)")
+    if not faction then
+        log("[TEST] unit suite skipped — no faction")
+        summarize("UNIT")
+        return
+    end
+
+    local unit = nil
+    local ok_unit, err_unit = pcall(function()
+        local forces = faction:military_force_list()
+        if not forces or forces:num_items() <= 0 then
+            error("military_force_list empty")
+        end
+        local force = forces:item_at(0)
+        local units = force:unit_list()
+        if not units or units:num_items() <= 0 then
+            error("unit_list empty")
+        end
+        unit = units:item_at(0)
+    end)
+    if not ok_unit then
+        log("[TEST] unit resolve error: " .. tostring(err_unit))
+    end
+    assert_true("resolve unit", ok_unit and unit ~= nil)
+    if not unit then
+        summarize("UNIT")
+        return
+    end
+
+    local addr = unit:GetMemoryAddress()
+    assert_true("unit GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
+    log("[TEST] unit addr=" .. tostring(addr))
+
+    local men = unit:GetNumMen()
+    local max_men = unit:GetMaxNumMen()
+    local ap = unit:GetActionPoints()
+    assert_true("GetNumMen number", type(men) == "number")
+    assert_true("GetMaxNumMen number", type(max_men) == "number")
+    assert_true("GetActionPoints number", type(ap) == "number")
+    assert_true("men <= max_men", men <= max_men)
+    log(string.format("[TEST] men=%s max=%s ap=%s", tostring(men), tostring(max_men), tostring(ap)))
+
+    local vanilla_men = nil
+    pcall(function()
+        if type(unit.number_of_men_in_unit) == "function" then
+            vanilla_men = unit:number_of_men_in_unit()
+        elseif type(unit.strength) == "function" then
+            -- strength is often a percentage; prefer number_of_men_in_unit when present
+        end
+    end)
+    if vanilla_men ~= nil then
+        log("[TEST] vanilla number_of_men_in_unit()=" .. tostring(vanilla_men))
+        assert_true("GetNumMen matches vanilla", men == vanilla_men)
+    else
+        log("[TEST] vanilla men accessor unavailable — skipped equality check")
+    end
+
+    local original_men = men
+    local set_men_ok = unit:SetNumMen(math.max(1, original_men - 1))
+    assert_true("SetNumMen returns true", set_men_ok == true)
+    assert_true("SetNumMen wrote value", unit:GetNumMen() == math.max(1, original_men - 1))
+    unit:SetNumMen(original_men)
+    assert_true("SetNumMen restored", unit:GetNumMen() == original_men)
+
+    local original_ap = ap
+    local set_ap_ok = unit:SetActionPoints(original_ap + 5)
+    assert_true("SetActionPoints returns true", set_ap_ok == true)
+    assert_true("SetActionPoints wrote value", unit:GetActionPoints() == original_ap + 5)
+    unit:SetActionPoints(original_ap)
+    assert_true("SetActionPoints restored", unit:GetActionPoints() == original_ap)
+
+    summarize("UNIT")
+end
+
+local function run_uicreated_suites()
+    local faction = run_faction_tests()
+    run_unit_tests(faction)
 end
 
 local scripting = rawget(_G, "EpisodicScripting")
@@ -141,15 +222,15 @@ end
 
 if type(scripting) == "table" and type(scripting.AddEventCallBack) == "function" then
     scripting.AddEventCallBack("UICreated", function()
-        local ok, err = pcall(run_faction_tests)
+        local ok, err = pcall(run_uicreated_suites)
         if not ok then
-            log("[TEST] faction suite error: " .. tostring(err))
+            log("[TEST] UICreated suite error: " .. tostring(err))
             failed = failed + 1
-            summarize("FACTION")
+            summarize("UICREATED")
         end
     end)
-    log("[TEST] faction suite deferred to UICreated")
+    log("[TEST] faction/unit suites deferred to UICreated")
 else
-    log("[TEST] AddEventCallBack unavailable — running faction suite immediately")
-    run_faction_tests()
+    log("[TEST] AddEventCallBack unavailable — running suites immediately")
+    run_uicreated_suites()
 end

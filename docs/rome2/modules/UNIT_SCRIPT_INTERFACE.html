@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>twdll Lua API</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>twdll</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/twdll.core.html">twdll.core</a></li>
+  <li><a href="../modules/FACTION_SCRIPT_INTERFACE.html">FACTION_SCRIPT_INTERFACE</a></li>
+  <li><strong>UNIT_SCRIPT_INTERFACE</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>UNIT_SCRIPT_INTERFACE</code></h1>
+<p>
+
+</p>
+<p> Extensions to the game's unit object (Rome 2).</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#GetActionPoints">GetActionPoints ()</a></td>
+	<td class="summary">Remaining movement action points for this unit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetMaxNumMen">GetMaxNumMen ()</a></td>
+	<td class="summary">Maximum soldier capacity (full strength count) for this unit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetMemoryAddress">GetMemoryAddress ()</a></td>
+	<td class="summary">Memory address of the unit object in hexadecimal format.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetNumMen">GetNumMen ()</a></td>
+	<td class="summary">Current number of surviving soldiers in the unit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetActionPoints">SetActionPoints (value)</a></td>
+	<td class="summary">Sets the movement action points for this unit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetMaxNumMen">SetMaxNumMen (value)</a></td>
+	<td class="summary">Sets the maximum soldier capacity for this unit.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetNumMen">SetNumMen (value)</a></td>
+	<td class="summary">Sets the number of surviving soldiers in the unit.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "GetActionPoints"></a>
+    <strong>GetActionPoints ()</strong>
+    </dt>
+    <dd>
+    Remaining movement action points for this unit.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">integer</span></span>
+        action points
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> ap = unit:<span class="function-name">GetActionPoints</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "GetMaxNumMen"></a>
+    <strong>GetMaxNumMen ()</strong>
+    </dt>
+    <dd>
+    Maximum soldier capacity (full strength count) for this unit.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">integer</span></span>
+        maximum number of men
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> max_men = unit:<span class="function-name">GetMaxNumMen</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "GetMemoryAddress"></a>
+    <strong>GetMemoryAddress ()</strong>
+    </dt>
+    <dd>
+    Memory address of the unit object in hexadecimal format.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        memory address (e.g. <code>&quot;0x12345678&quot;</code>)
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> addr = unit:<span class="function-name">GetMemoryAddress</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "GetNumMen"></a>
+    <strong>GetNumMen ()</strong>
+    </dt>
+    <dd>
+    Current number of surviving soldiers in the unit.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">integer</span></span>
+        current number of men
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> men = unit:<span class="function-name">GetNumMen</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "SetActionPoints"></a>
+    <strong>SetActionPoints (value)</strong>
+    </dt>
+    <dd>
+    Sets the movement action points for this unit.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">integer</span></span>
+         new action points
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        <code>true</code> on success, <code>false</code> if the unit wrapper is invalid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">unit:<span class="function-name">SetActionPoints</span>(<span class="number">100</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "SetMaxNumMen"></a>
+    <strong>SetMaxNumMen (value)</strong>
+    </dt>
+    <dd>
+    Sets the maximum soldier capacity for this unit.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">integer</span></span>
+         new maximum number of men
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        <code>true</code> on success, <code>false</code> if the unit wrapper is invalid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">unit:<span class="function-name">SetMaxNumMen</span>(<span class="number">160</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "SetNumMen"></a>
+    <strong>SetNumMen (value)</strong>
+    </dt>
+    <dd>
+    Sets the number of surviving soldiers in the unit.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">integer</span></span>
+         new number of men
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        <code>true</code> on success, <code>false</code> if the unit wrapper is invalid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">unit:<span class="function-name">SetNumMen</span>(unit:<span class="function-name">GetMaxNumMen</span>())</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/ldoc">LDoc 1.5.0</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

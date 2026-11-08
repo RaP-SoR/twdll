@@ -5,6 +5,7 @@
 
 extern const luaL_Reg twdll_core[];
 extern void register_faction_methods(lua_State* L);
+extern void register_unit_methods(lua_State* L);
 
 static bool g_is_initialized = false;
 
@@ -51,7 +52,8 @@ extern "C" __declspec(dllexport) int luaopen_twdll(lua_State *L) {
     l_register(L, "twdll", twdll_core);
     l_setfield(L, -2, "core");
     register_faction_methods(L);
+    register_unit_methods(L);
 
-    Log("[twdll] luaopen_twdll: registered twdll.core and FACTION_SCRIPT_INTERFACE methods");
+    Log("[twdll] luaopen_twdll: registered twdll.core, faction, and unit methods");
     return 1;
 }

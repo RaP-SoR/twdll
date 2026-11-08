@@ -39,6 +39,7 @@ set(TWDLL_GAME_SOURCES
     src/rome2/game_sigs.cpp
     src/rome2/lua_sigs.cpp
     src/rome2/security.cpp
+    src/rome2/unit.cpp
 )
 
 # ── Library target ────────────────────────────────────────────────────────────

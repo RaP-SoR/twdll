@@ -12,11 +12,20 @@ namespace twdll {
 
 #pragma pack(push, 1)
 
-// EMPIRECAMPAIGN::FACTION — gold/treasury candidate at +0x6C4 (legacy Rome 2 mapping).
-// Verified in-game against faction:treasury() before treating as stable.
+// EMPIRECAMPAIGN::FACTION — gold/treasury at +0x6C4 (verified vs faction:treasury()).
 struct TW_Faction {
     char pad_00[0x6C4];
     int  gold; // 0x6C4
+};
+
+// EMPIRECAMPAIGN::UNIT — men / AP layout matches Attila + legacy Rome 2 mapping.
+// Live-verify against vanilla unit strength / AP accessors before treating as stable.
+struct TW_Unit {
+    char pad_00[0x44];
+    int  num_men;       // 0x44
+    int  max_num_men;   // 0x48
+    char pad_4C[0x18];
+    int  action_points; // 0x64
 };
 
 #pragma pack(pop)
@@ -25,6 +34,9 @@ struct TW_Faction {
     static_assert(offsetof(S, F) == (O), #S " Rome2: " #F " expected at " #O)
 
 TW_ASSERT_OFFSET(TW_Faction, gold, 0x6C4);
+TW_ASSERT_OFFSET(TW_Unit, num_men, 0x44);
+TW_ASSERT_OFFSET(TW_Unit, max_num_men, 0x48);
+TW_ASSERT_OFFSET(TW_Unit, action_points, 0x64);
 
 // Per-type pointer offset inside the Lua userdata wrapper.
 template <typename T>
@@ -38,6 +50,7 @@ struct TW_PtrOffset {
     struct TW_PtrOffset<T> { static constexpr size_t value = (O); }
 
 TW_PTR_OFFSET(TW_Faction, 0x8);
+TW_PTR_OFFSET(TW_Unit, 0x8);
 
 template <typename T>
 T* tw_unwrap(lua_State* L, int slot) {
