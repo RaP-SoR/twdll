@@ -34,6 +34,7 @@ set(TWDLL_COMMON_SOURCES
 )
 
 set(TWDLL_GAME_SOURCES
+    src/rome2/character.cpp
     src/rome2/core.cpp
     src/rome2/faction.cpp
     src/rome2/game_sigs.cpp

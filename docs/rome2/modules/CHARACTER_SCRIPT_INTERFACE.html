@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>twdll Lua API</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>twdll</h1>
+
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/twdll.core.html">twdll.core</a></li>
+  <li><strong>CHARACTER_SCRIPT_INTERFACE</strong></li>
+  <li><a href="../modules/FACTION_SCRIPT_INTERFACE.html">FACTION_SCRIPT_INTERFACE</a></li>
+  <li><a href="../modules/UNIT_SCRIPT_INTERFACE.html">UNIT_SCRIPT_INTERFACE</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>CHARACTER_SCRIPT_INTERFACE</code></h1>
+<p>
+
+</p>
+<p> Extensions to the game's character object (Rome 2).</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#GetActionPoints">GetActionPoints ()</a></td>
+	<td class="summary">Remaining campaign movement action points for this character.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetAmbition">GetAmbition ()</a></td>
+	<td class="summary">Ambition level of the character.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetGravitas">GetGravitas ()</a></td>
+	<td class="summary">Gravitas (political standing) of the character.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetMemoryAddress">GetMemoryAddress ()</a></td>
+	<td class="summary">Memory address of the character object in hexadecimal format.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetActionPoints">SetActionPoints (value)</a></td>
+	<td class="summary">Sets the campaign movement action points for this character.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetAmbition">SetAmbition (value)</a></td>
+	<td class="summary">Sets the ambition level of the character.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetGravitas">SetGravitas (value)</a></td>
+	<td class="summary">Sets the gravitas (political standing) of the character.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "GetActionPoints"></a>
+    <strong>GetActionPoints ()</strong>
+    </dt>
+    <dd>
+    Remaining campaign movement action points for this character.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">integer</span></span>
+        action points
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> ap = character:<span class="function-name">GetActionPoints</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "GetAmbition"></a>
+    <strong>GetAmbition ()</strong>
+    </dt>
+    <dd>
+    Ambition level of the character.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">integer</span></span>
+        ambition level
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> ambition = character:<span class="function-name">GetAmbition</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "GetGravitas"></a>
+    <strong>GetGravitas ()</strong>
+    </dt>
+    <dd>
+    Gravitas (political standing) of the character.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">integer</span></span>
+        gravitas
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> gravitas = character:<span class="function-name">GetGravitas</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "GetMemoryAddress"></a>
+    <strong>GetMemoryAddress ()</strong>
+    </dt>
+    <dd>
+    Memory address of the character object in hexadecimal format.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        memory address (e.g. <code>&quot;0x12345678&quot;</code>)
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> addr = character:<span class="function-name">GetMemoryAddress</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "SetActionPoints"></a>
+    <strong>SetActionPoints (value)</strong>
+    </dt>
+    <dd>
+    Sets the campaign movement action points for this character.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">integer</span></span>
+         new action points
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        <code>true</code> on success, <code>false</code> if the character wrapper is invalid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">character:<span class="function-name">SetActionPoints</span>(<span class="number">100</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "SetAmbition"></a>
+    <strong>SetAmbition (value)</strong>
+    </dt>
+    <dd>
+    Sets the ambition level of the character.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">integer</span></span>
+         new ambition level
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        <code>true</code> on success, <code>false</code> if the character wrapper is invalid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">character:<span class="function-name">SetAmbition</span>(<span class="number">50</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "SetGravitas"></a>
+    <strong>SetGravitas (value)</strong>
+    </dt>
+    <dd>
+    Sets the gravitas (political standing) of the character.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">integer</span></span>
+         new gravitas
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        <code>true</code> on success, <code>false</code> if the character wrapper is invalid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">character:<span class="function-name">SetGravitas</span>(<span class="number">40</span>)</pre>
+    </ul>
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/lunarmodules/ldoc">LDoc 1.5.0</a></i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

@@ -209,9 +209,72 @@ local function run_unit_tests(faction)
     summarize("UNIT")
 end
 
+local function run_character_tests(faction)
+    log("[TEST] Rome 2 smoke (UICreated / character)")
+    if not faction then
+        log("[TEST] character suite skipped — no faction")
+        summarize("CHARACTER")
+        return
+    end
+
+    local character = nil
+    local ok_char, err_char = pcall(function()
+        local chars = faction:character_list()
+        if not chars or chars:num_items() <= 0 then
+            error("character_list empty")
+        end
+        character = chars:item_at(0)
+    end)
+    if not ok_char then
+        log("[TEST] character resolve error: " .. tostring(err_char))
+    end
+    assert_true("resolve character", ok_char and character ~= nil)
+    if not character then
+        summarize("CHARACTER")
+        return
+    end
+
+    local addr = character:GetMemoryAddress()
+    assert_true("character GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
+    log("[TEST] character addr=" .. tostring(addr))
+
+    local ap = character:GetActionPoints()
+    local ambition = character:GetAmbition()
+    local gravitas = character:GetGravitas()
+    assert_true("GetActionPoints number", type(ap) == "number")
+    assert_true("GetAmbition number", type(ambition) == "number")
+    assert_true("GetGravitas number", type(gravitas) == "number")
+    log(string.format("[TEST] ap=%s ambition=%s gravitas=%s",
+        tostring(ap), tostring(ambition), tostring(gravitas)))
+
+    local original_ap = ap
+    local set_ap_ok = character:SetActionPoints(original_ap + 5)
+    assert_true("SetActionPoints returns true", set_ap_ok == true)
+    assert_true("SetActionPoints wrote value", character:GetActionPoints() == original_ap + 5)
+    character:SetActionPoints(original_ap)
+    assert_true("SetActionPoints restored", character:GetActionPoints() == original_ap)
+
+    local original_ambition = ambition
+    local set_amb_ok = character:SetAmbition(original_ambition + 3)
+    assert_true("SetAmbition returns true", set_amb_ok == true)
+    assert_true("SetAmbition wrote value", character:GetAmbition() == original_ambition + 3)
+    character:SetAmbition(original_ambition)
+    assert_true("SetAmbition restored", character:GetAmbition() == original_ambition)
+
+    local original_gravitas = gravitas
+    local set_grav_ok = character:SetGravitas(original_gravitas + 3)
+    assert_true("SetGravitas returns true", set_grav_ok == true)
+    assert_true("SetGravitas wrote value", character:GetGravitas() == original_gravitas + 3)
+    character:SetGravitas(original_gravitas)
+    assert_true("SetGravitas restored", character:GetGravitas() == original_gravitas)
+
+    summarize("CHARACTER")
+end
+
 local function run_uicreated_suites()
     local faction = run_faction_tests()
     run_unit_tests(faction)
+    run_character_tests(faction)
 end
 
 local scripting = rawget(_G, "EpisodicScripting")
@@ -229,7 +292,7 @@ if type(scripting) == "table" and type(scripting.AddEventCallBack) == "function"
             summarize("UICREATED")
         end
     end)
-    log("[TEST] faction/unit suites deferred to UICreated")
+    log("[TEST] faction/unit/character suites deferred to UICreated")
 else
     log("[TEST] AddEventCallBack unavailable — running suites immediately")
     run_uicreated_suites()

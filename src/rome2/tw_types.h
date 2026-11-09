@@ -28,6 +28,15 @@ struct TW_Unit {
     int  action_points; // 0x64
 };
 
+// EMPIRECAMPAIGN::CHARACTER — AP at +0x14; ambition/gravitas legacy Rome 2 mapping.
+struct TW_Character {
+    char pad_00[0x14];
+    int  action_points; // 0x14
+    char pad_18[0x540];
+    int  ambition;      // 0x558
+    int  gravitas;      // 0x55C
+};
+
 #pragma pack(pop)
 
 #define TW_ASSERT_OFFSET(S, F, O) \
@@ -37,6 +46,9 @@ TW_ASSERT_OFFSET(TW_Faction, gold, 0x6C4);
 TW_ASSERT_OFFSET(TW_Unit, num_men, 0x44);
 TW_ASSERT_OFFSET(TW_Unit, max_num_men, 0x48);
 TW_ASSERT_OFFSET(TW_Unit, action_points, 0x64);
+TW_ASSERT_OFFSET(TW_Character, action_points, 0x14);
+TW_ASSERT_OFFSET(TW_Character, ambition, 0x558);
+TW_ASSERT_OFFSET(TW_Character, gravitas, 0x55C);
 
 // Per-type pointer offset inside the Lua userdata wrapper.
 template <typename T>
@@ -51,6 +63,7 @@ struct TW_PtrOffset {
 
 TW_PTR_OFFSET(TW_Faction, 0x8);
 TW_PTR_OFFSET(TW_Unit, 0x8);
+TW_PTR_OFFSET(TW_Character, 0x8);
 
 template <typename T>
 T* tw_unwrap(lua_State* L, int slot) {
