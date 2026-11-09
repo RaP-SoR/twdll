@@ -37,6 +37,22 @@ struct TW_Character {
     int  gravitas;      // 0x55C
 };
 
+// EMPIRECAMPAIGN::MILITARY_FORCE — recruitment queue size at +0x45C (legacy Rome 2).
+struct TW_MilitaryForce {
+    char pad_00[0x45C];
+    int  recruitment_queue_size; // 0x45C
+};
+
+// EMPIRECAMPAIGN::REGION — address-only for now (no verified field offsets yet).
+struct TW_Region {
+    char pad_00[0x4];
+};
+
+// EMPIRECAMPAIGN::REGION_SLOT — address-only for now (no verified field offsets yet).
+struct TW_RegionSlot {
+    char pad_00[0x4];
+};
+
 #pragma pack(pop)
 
 #define TW_ASSERT_OFFSET(S, F, O) \
@@ -49,6 +65,7 @@ TW_ASSERT_OFFSET(TW_Unit, action_points, 0x64);
 TW_ASSERT_OFFSET(TW_Character, action_points, 0x14);
 TW_ASSERT_OFFSET(TW_Character, ambition, 0x558);
 TW_ASSERT_OFFSET(TW_Character, gravitas, 0x55C);
+TW_ASSERT_OFFSET(TW_MilitaryForce, recruitment_queue_size, 0x45C);
 
 // Per-type pointer offset inside the Lua userdata wrapper.
 template <typename T>
@@ -64,6 +81,9 @@ struct TW_PtrOffset {
 TW_PTR_OFFSET(TW_Faction, 0x8);
 TW_PTR_OFFSET(TW_Unit, 0x8);
 TW_PTR_OFFSET(TW_Character, 0x8);
+TW_PTR_OFFSET(TW_MilitaryForce, 0x8);
+TW_PTR_OFFSET(TW_Region, 0x8);
+TW_PTR_OFFSET(TW_RegionSlot, 0x8);
 
 template <typename T>
 T* tw_unwrap(lua_State* L, int slot) {

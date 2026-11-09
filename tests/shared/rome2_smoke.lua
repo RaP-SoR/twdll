@@ -271,10 +271,130 @@ local function run_character_tests(faction)
     summarize("CHARACTER")
 end
 
+local function run_military_force_tests(faction)
+    log("[TEST] Rome 2 smoke (UICreated / military_force)")
+    if not faction then
+        log("[TEST] military_force suite skipped — no faction")
+        summarize("MILFORCE")
+        return
+    end
+
+    local force = nil
+    local ok_force, err_force = pcall(function()
+        local forces = faction:military_force_list()
+        if not forces or forces:num_items() <= 0 then
+            error("military_force_list empty")
+        end
+        force = forces:item_at(0)
+    end)
+    if not ok_force then
+        log("[TEST] military_force resolve error: " .. tostring(err_force))
+    end
+    assert_true("resolve military_force", ok_force and force ~= nil)
+    if not force then
+        summarize("MILFORCE")
+        return
+    end
+
+    local addr = force:GetMemoryAddress()
+    assert_true("force GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
+    log("[TEST] force addr=" .. tostring(addr))
+
+    local queue = force:GetRecruitmentQueueSize()
+    assert_true("GetRecruitmentQueueSize number", type(queue) == "number")
+    assert_true("GetRecruitmentQueueSize non-negative", queue >= 0)
+    log("[TEST] recruitment_queue_size=" .. tostring(queue))
+
+    local original = queue
+    local set_ok = force:SetRecruitmentQueueSize(original + 1)
+    assert_true("SetRecruitmentQueueSize returns true", set_ok == true)
+    assert_true("SetRecruitmentQueueSize wrote value", force:GetRecruitmentQueueSize() == original + 1)
+    force:SetRecruitmentQueueSize(original)
+    assert_true("SetRecruitmentQueueSize restored", force:GetRecruitmentQueueSize() == original)
+
+    summarize("MILFORCE")
+end
+
+local function run_region_tests(faction)
+    log("[TEST] Rome 2 smoke (UICreated / region)")
+    if not faction then
+        log("[TEST] region suite skipped — no faction")
+        summarize("REGION")
+        return
+    end
+
+    local region = nil
+    local ok_region, err_region = pcall(function()
+        local regions = faction:region_list()
+        if not regions or regions:num_items() <= 0 then
+            error("region_list empty")
+        end
+        region = regions:item_at(0)
+    end)
+    if not ok_region then
+        log("[TEST] region resolve error: " .. tostring(err_region))
+    end
+    assert_true("resolve region", ok_region and region ~= nil)
+    if not region then
+        summarize("REGION")
+        return
+    end
+
+    local addr = region:GetMemoryAddress()
+    assert_true("region GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
+    log("[TEST] region addr=" .. tostring(addr))
+
+    summarize("REGION")
+end
+
+local function run_slot_tests(faction)
+    log("[TEST] Rome 2 smoke (UICreated / slot)")
+    if not faction then
+        log("[TEST] slot suite skipped — no faction")
+        summarize("SLOT")
+        return
+    end
+
+    local slot = nil
+    local ok_slot, err_slot = pcall(function()
+        local regions = faction:region_list()
+        if not regions or regions:num_items() <= 0 then
+            error("region_list empty")
+        end
+        local region = regions:item_at(0)
+        local settlement = region:settlement()
+        if not settlement then
+            error("settlement nil")
+        end
+        local slots = settlement:slot_list()
+        if not slots or slots:num_items() <= 0 then
+            error("slot_list empty")
+        end
+        slot = slots:item_at(0)
+    end)
+    if not ok_slot then
+        log("[TEST] slot resolve error: " .. tostring(err_slot))
+    end
+    assert_true("resolve slot", ok_slot and slot ~= nil)
+    if not slot then
+        summarize("SLOT")
+        return
+    end
+
+    local addr = slot:GetMemoryAddress()
+    assert_true("slot GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
+    log("[TEST] slot addr=" .. tostring(addr))
+
+    summarize("SLOT")
+end
+
 local function run_uicreated_suites()
     local faction = run_faction_tests()
     run_unit_tests(faction)
     run_character_tests(faction)
+    run_military_force_tests(faction)
+    run_region_tests(faction)
+    run_slot_tests(faction)
 end
 
 local scripting = rawget(_G, "EpisodicScripting")
@@ -292,7 +412,7 @@ if type(scripting) == "table" and type(scripting.AddEventCallBack) == "function"
             summarize("UICREATED")
         end
     end)
-    log("[TEST] faction/unit/character suites deferred to UICreated")
+    log("[TEST] faction/unit/character/force/region/slot suites deferred to UICreated")
 else
     log("[TEST] AddEventCallBack unavailable — running suites immediately")
     run_uicreated_suites()
