@@ -77,18 +77,26 @@ end
 
 summarize("LOAD")
 
-local function run_faction_tests()
-    log("[TEST] Rome 2 smoke (UICreated / faction)")
-
+-- Rome 2 exposes the campaign script interface on EpisodicScripting.game_interface,
+-- not as a global `game_interface` (that name is Attila/WH-style).
+local function get_game_interface()
     local scripting = rawget(_G, "EpisodicScripting")
     if type(scripting) ~= "table" then
         local ok_req, mod = pcall(require, "lua_scripts.EpisodicScripting")
         if ok_req then scripting = mod end
     end
+    if type(scripting) == "table" and scripting.game_interface then
+        return scripting.game_interface
+    end
+    return rawget(_G, "game_interface")
+end
+
+local function run_faction_tests()
+    log("[TEST] Rome 2 smoke (UICreated / faction)")
 
     local faction = nil
     local ok_faction, err_faction = pcall(function()
-        local gi = scripting and scripting.game_interface
+        local gi = get_game_interface()
         if not gi then
             error("game_interface is nil")
         end
@@ -399,11 +407,7 @@ local function run_world_tests()
     if type(addr) ~= "string" then
         log("[TEST] world addr nil after ctor hook — trying Capture from vanilla world()")
         local ok_cap, err_cap = pcall(function()
-            local gi = rawget(_G, "game_interface")
-            if not gi then
-                local scripting = rawget(_G, "EpisodicScripting")
-                if type(scripting) == "table" then gi = scripting.game_interface end
-            end
+            local gi = get_game_interface()
             if not gi then error("game_interface nil") end
             local world = gi:model():world()
             local captured = twdll.world.Capture(world)
@@ -424,16 +428,14 @@ local function run_world_tests()
     log("[TEST] faction_count=" .. tostring(count))
 
     local vanilla_count = nil
-    pcall(function()
-        local gi = rawget(_G, "game_interface")
-        if not gi then
-            local scripting = rawget(_G, "EpisodicScripting")
-            if type(scripting) == "table" then gi = scripting.game_interface end
-        end
-        if gi then
-            vanilla_count = gi:model():world():faction_list():num_items()
-        end
+    local ok_van, err_van = pcall(function()
+        local gi = get_game_interface()
+        if not gi then error("game_interface nil") end
+        vanilla_count = gi:model():world():faction_list():num_items()
     end)
+    if not ok_van then
+        log("[TEST] vanilla faction_list error: " .. tostring(err_van))
+    end
     if vanilla_count ~= nil then
         log("[TEST] vanilla faction_list:num_items()=" .. tostring(vanilla_count))
         assert_true("GetFactionCount matches vanilla", count == vanilla_count)
