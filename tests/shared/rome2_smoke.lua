@@ -352,6 +352,16 @@ local function run_region_tests(faction)
     assert_true("region GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
     log("[TEST] region addr=" .. tostring(addr))
 
+    pcall(function()
+        if type(region.name) == "function" then
+            log("[TEST] region name=" .. tostring(region:name()))
+        end
+    end)
+    assert_true("region DumpInts 0x0", region:DumpInts(0x0, 48) == true)
+    assert_true("region DumpInts 0xC0", region:DumpInts(0xC0, 48) == true)
+    assert_true("region DumpInts 0x140", region:DumpInts(0x140, 48) == true)
+    assert_true("region GetIntAtOffset", type(region:GetIntAtOffset(0x0)) == "number")
+
     summarize("REGION")
 end
 
@@ -363,8 +373,8 @@ local function run_slot_tests(faction)
         return
     end
 
-    local slot = nil
-    local ok_slot, err_slot = pcall(function()
+    local slots = nil
+    local ok_slots, err_slots = pcall(function()
         local regions = faction:region_list()
         if not regions or regions:num_items() <= 0 then
             error("region_list empty")
@@ -374,16 +384,22 @@ local function run_slot_tests(faction)
         if not settlement then
             error("settlement nil")
         end
-        local slots = settlement:slot_list()
+        slots = settlement:slot_list()
         if not slots or slots:num_items() <= 0 then
             error("slot_list empty")
         end
-        slot = slots:item_at(0)
     end)
-    if not ok_slot then
-        log("[TEST] slot resolve error: " .. tostring(err_slot))
+    if not ok_slots then
+        log("[TEST] slot resolve error: " .. tostring(err_slots))
     end
-    assert_true("resolve slot", ok_slot and slot ~= nil)
+    assert_true("resolve slot_list", ok_slots and slots ~= nil)
+    if not slots then
+        summarize("SLOT")
+        return
+    end
+
+    local slot = slots:item_at(0)
+    assert_true("resolve slot", slot ~= nil)
     if not slot then
         summarize("SLOT")
         return
@@ -392,6 +408,50 @@ local function run_slot_tests(faction)
     local addr = slot:GetMemoryAddress()
     assert_true("slot GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
     log("[TEST] slot addr=" .. tostring(addr))
+
+    pcall(function()
+        if type(slot.name) == "function" then
+            log("[TEST] slot[0] name=" .. tostring(slot:name()))
+        end
+    end)
+    assert_true("slot DumpInts", slot:DumpInts(0x0, 48) == true)
+    assert_true("slot GetIntAtOffset", type(slot:GetIntAtOffset(0x0)) == "number")
+
+    -- Compare a second slot when available (primary vs secondary layout).
+    if slots:num_items() > 1 then
+        local slot2 = slots:item_at(1)
+        assert_true("resolve slot[1]", slot2 ~= nil)
+        if slot2 then
+            pcall(function()
+                if type(slot2.name) == "function" then
+                    log("[TEST] slot[1] name=" .. tostring(slot2:name()))
+                end
+            end)
+            log(string.format("[TEST] slot[0] +0xA0=%s +0x4=%s +0x9C=%s",
+                tostring(slot:GetIntAtOffset(0xA0)),
+                tostring(slot:GetIntAtOffset(0x4)),
+                tostring(slot:GetIntAtOffset(0x9C))))
+            log(string.format("[TEST] slot[1] +0xA0=%s +0x4=%s +0x9C=%s",
+                tostring(slot2:GetIntAtOffset(0xA0)),
+                tostring(slot2:GetIntAtOffset(0x4)),
+                tostring(slot2:GetIntAtOffset(0x9C))))
+            assert_true("slot[1] DumpInts", slot2:DumpInts(0x0, 48) == true)
+        end
+    else
+        log("[TEST] only one slot — skipped slot[1] compare")
+    end
+
+    -- Probe +0xA0 as rotation candidate (0..5): write next step, verify, restore.
+    local original_a0 = slot:GetIntAtOffset(0xA0)
+    assert_true("slot +0xA0 number", type(original_a0) == "number")
+    local probe_a0 = (original_a0 + 1) % 6
+    slot:SetIntAtOffset(0xA0, probe_a0)
+    local after_a0 = slot:GetIntAtOffset(0xA0)
+    assert_true("slot SetIntAtOffset(+0xA0) wrote", after_a0 == probe_a0)
+    log(string.format("[TEST] slot +0xA0 probe original=%s wrote=%s readback=%s",
+        tostring(original_a0), tostring(probe_a0), tostring(after_a0)))
+    slot:SetIntAtOffset(0xA0, original_a0)
+    assert_true("slot +0xA0 restored", slot:GetIntAtOffset(0xA0) == original_a0)
 
     summarize("SLOT")
 end

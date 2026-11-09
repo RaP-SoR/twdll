@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file.
 - Extended `UNIT_SCRIPT_INTERFACE` with `GetMemoryAddress()`, `GetNumMen()` / `SetNumMen(value)`, `GetMaxNumMen()` / `SetMaxNumMen(value)`, and `GetActionPoints()` / `SetActionPoints(value)`.
 - Extended `CHARACTER_SCRIPT_INTERFACE` with `GetMemoryAddress()`, `GetActionPoints()` / `SetActionPoints(value)`, `GetAmbition()` / `SetAmbition(value)`, and `GetGravitas()` / `SetGravitas(value)`.
 - Extended `MILITARY_FORCE_SCRIPT_INTERFACE` with `GetMemoryAddress()`, `GetRecruitmentQueueSize()`, and `SetRecruitmentQueueSize(value)`.
-- Extended `REGION_SCRIPT_INTERFACE` with `GetMemoryAddress()`.
-- Extended `SLOT_SCRIPT_INTERFACE` with `GetMemoryAddress()`.
+- Extended `REGION_SCRIPT_INTERFACE` with `GetMemoryAddress()`, plus temporary diagnostics `GetIntAtOffset(offset)`, `SetIntAtOffset(offset, value)`, and `DumpInts(start_offset, count)` for layout discovery.
+- Extended `SLOT_SCRIPT_INTERFACE` with `GetMemoryAddress()`, plus temporary diagnostics `GetIntAtOffset(offset)`, `SetIntAtOffset(offset, value)`, and `DumpInts(start_offset, count)` for layout discovery.
 - Added `twdll.world` with `GetMemoryAddress()`, `GetFactionCount()`, and `Capture(world)` — captures the campaign WORLD singleton via ctor hook (anchor `FACTION_ARRAY`) or from a vanilla world userdata when the hook missed construction.
 - Added `twdll.campaign_ui` with `GetMemoryAddress()` — captures the CAMPAIGN_UI singleton via ctor hook (anchor `data/ui/campaign ui/mp_timer`).
 

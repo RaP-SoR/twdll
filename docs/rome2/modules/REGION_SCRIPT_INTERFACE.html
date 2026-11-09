@@ -64,8 +64,20 @@
 <h2><a href="#Functions">Functions</a></h2>
 <table class="function_list">
 	<tr>
+	<td class="name" nowrap><a href="#DumpInts">DumpInts (start_offset, count)</a></td>
+	<td class="summary">Diagnostic: log a run of 32-bit integers starting at <code>start_offset</code>.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#GetIntAtOffset">GetIntAtOffset (offset)</a></td>
+	<td class="summary">Diagnostic: read a 32-bit signed integer at a byte offset from the region object.</td>
+	</tr>
+	<tr>
 	<td class="name" nowrap><a href="#GetMemoryAddress">GetMemoryAddress ()</a></td>
 	<td class="summary">Memory address of the region object in hexadecimal format.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#SetIntAtOffset">SetIntAtOffset (offset, value)</a></td>
+	<td class="summary">Diagnostic: write a 32-bit signed integer at a byte offset on the region object.</td>
 	</tr>
 </table>
 
@@ -76,6 +88,74 @@
     <h2 class="section-header "><a name="Functions"></a>Functions</h2>
 
     <dl class="function">
+    <dt>
+    <a name = "DumpInts"></a>
+    <strong>DumpInts (start_offset, count)</strong>
+    </dt>
+    <dd>
+    Diagnostic: log a run of 32-bit integers starting at <code>start_offset</code>.
+ Writes one <code>[DIAG][region]</code> line to <code>twdll.log</code>. Clamps <code>count</code> to 1..64.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">start_offset</span>
+            <span class="types"><span class="type">integer</span></span>
+         byte offset (should be 4-byte aligned)
+        </li>
+        <li><span class="parameter">count</span>
+            <span class="types"><span class="type">integer</span></span>
+         number of ints to dump
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        <code>true</code> if the dump was written
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">region:<span class="function-name">DumpInts</span>(<span class="number">0x0</span>, <span class="number">32</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "GetIntAtOffset"></a>
+    <strong>GetIntAtOffset (offset)</strong>
+    </dt>
+    <dd>
+    Diagnostic: read a 32-bit signed integer at a byte offset from the region object.
+ Temporary helper for layout discovery — not a stable gameplay API.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">integer</span></span>
+         byte offset from the start of the region object
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">integer</span> or <span class="type">nil</span></span>
+        value at the offset, or nil if the wrapper is invalid
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="keyword">local</span> v = region:<span class="function-name">GetIntAtOffset</span>(<span class="number">0x50</span>)</pre>
+    </ul>
+
+</dd>
     <dt>
     <a name = "GetMemoryAddress"></a>
     <strong>GetMemoryAddress ()</strong>
@@ -97,6 +177,36 @@
     <h3>Usage:</h3>
     <ul>
         <pre class="example"><span class="keyword">local</span> addr = region:<span class="function-name">GetMemoryAddress</span>()</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "SetIntAtOffset"></a>
+    <strong>SetIntAtOffset (offset, value)</strong>
+    </dt>
+    <dd>
+    Diagnostic: write a 32-bit signed integer at a byte offset on the region object.
+ Temporary helper for layout discovery — not a stable gameplay API.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">integer</span></span>
+         byte offset from the start of the region object
+        </li>
+        <li><span class="parameter">value</span>
+            <span class="types"><span class="type">integer</span></span>
+         value to write
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">region:<span class="function-name">SetIntAtOffset</span>(<span class="number">0x80</span>, <span class="number">100000</span>)</pre>
     </ul>
 
 </dd>
