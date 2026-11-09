@@ -53,6 +53,17 @@ struct TW_RegionSlot {
     char pad_00[0x4];
 };
 
+// EMPIRECAMPAIGN::WORLD — faction_count at +0x50 (legacy Rome 2 / Attila mapping).
+struct TW_World {
+    char pad_00[0x50];
+    int  faction_count; // 0x50
+};
+
+// EMPIRECAMPAIGN::CAMPAIGN_UI — address-only for now.
+struct TW_CampaignUi {
+    char pad_00[0x4];
+};
+
 #pragma pack(pop)
 
 #define TW_ASSERT_OFFSET(S, F, O) \
@@ -66,6 +77,7 @@ TW_ASSERT_OFFSET(TW_Character, action_points, 0x14);
 TW_ASSERT_OFFSET(TW_Character, ambition, 0x558);
 TW_ASSERT_OFFSET(TW_Character, gravitas, 0x55C);
 TW_ASSERT_OFFSET(TW_MilitaryForce, recruitment_queue_size, 0x45C);
+TW_ASSERT_OFFSET(TW_World, faction_count, 0x50);
 
 // Per-type pointer offset inside the Lua userdata wrapper.
 template <typename T>

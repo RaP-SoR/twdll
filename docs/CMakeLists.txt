@@ -46,6 +46,8 @@ elseif(TW_GAME STREQUAL "rome2")
         "${PROJECT_SOURCE_DIR}/src/rome2/military_force.cpp"
         "${PROJECT_SOURCE_DIR}/src/rome2/region.cpp"
         "${PROJECT_SOURCE_DIR}/src/rome2/slot.cpp"
+        "${PROJECT_SOURCE_DIR}/src/rome2/world.cpp"
+        "${PROJECT_SOURCE_DIR}/src/rome2/campaign_ui.cpp"
     )
 endif()
 

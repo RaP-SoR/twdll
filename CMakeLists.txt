@@ -27,6 +27,7 @@ endif()
 set(TWDLL_COMMON_SOURCES
     src/main.cpp
     src/twdll.rc
+    src/common/campaign_hooks.cpp
     src/common/log.cpp
     src/common/lua_api.cpp
     src/common/game_api.cpp
@@ -34,6 +35,7 @@ set(TWDLL_COMMON_SOURCES
 )
 
 set(TWDLL_GAME_SOURCES
+    src/rome2/campaign_ui.cpp
     src/rome2/character.cpp
     src/rome2/core.cpp
     src/rome2/faction.cpp
@@ -44,6 +46,7 @@ set(TWDLL_GAME_SOURCES
     src/rome2/security.cpp
     src/rome2/slot.cpp
     src/rome2/unit.cpp
+    src/rome2/world.cpp
 )
 
 # ── Library target ────────────────────────────────────────────────────────────
@@ -69,7 +72,7 @@ target_compile_definitions(twdll PRIVATE
 )
 
 target_include_directories(twdll PRIVATE src)
-target_link_libraries(twdll PRIVATE minhook)
+target_link_libraries(twdll PRIVATE minhook Psapi)
 
 # Add Windows SDK and compiler standard library paths
 if(MSVC)

@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
 - Extended `MILITARY_FORCE_SCRIPT_INTERFACE` with `GetMemoryAddress()`, `GetRecruitmentQueueSize()`, and `SetRecruitmentQueueSize(value)`.
 - Extended `REGION_SCRIPT_INTERFACE` with `GetMemoryAddress()`.
 - Extended `SLOT_SCRIPT_INTERFACE` with `GetMemoryAddress()`.
+- Added `twdll.world` with `GetMemoryAddress()`, `GetFactionCount()`, and `Capture(world)` — captures the campaign WORLD singleton via ctor hook (anchor `FACTION_ARRAY`) or from a vanilla world userdata when the hook missed construction.
+- Added `twdll.campaign_ui` with `GetMemoryAddress()` — captures the CAMPAIGN_UI singleton via ctor hook (anchor `data/ui/campaign ui/mp_timer`).
 
 ### Changed
 - This branch targets Total War: Rome 2. The DLL scans Lua C API signatures in `empire.retail.dll` and registers `twdll.core.Log(...)`, `twdll.core.GameBuild()`, and `twdll.core.GetBuildSha()`. `Log` accepts any number of values (converted via Lua `tostring`).

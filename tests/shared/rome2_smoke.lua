@@ -388,6 +388,77 @@ local function run_slot_tests(faction)
     summarize("SLOT")
 end
 
+local function run_world_tests()
+    log("[TEST] Rome 2 smoke (UICreated / world)")
+    assert_true("twdll.world table", type(twdll) == "table" and type(twdll.world) == "table")
+    assert_true("twdll.world.GetMemoryAddress", type(twdll.world.GetMemoryAddress) == "function")
+    assert_true("twdll.world.GetFactionCount", type(twdll.world.GetFactionCount) == "function")
+    assert_true("twdll.world.Capture", type(twdll.world.Capture) == "function")
+
+    local addr = twdll.world.GetMemoryAddress()
+    if type(addr) ~= "string" then
+        log("[TEST] world addr nil after ctor hook — trying Capture from vanilla world()")
+        local ok_cap, err_cap = pcall(function()
+            local gi = rawget(_G, "game_interface")
+            if not gi then
+                local scripting = rawget(_G, "EpisodicScripting")
+                if type(scripting) == "table" then gi = scripting.game_interface end
+            end
+            if not gi then error("game_interface nil") end
+            local world = gi:model():world()
+            local captured = twdll.world.Capture(world)
+            if not captured then error("Capture returned false") end
+        end)
+        if not ok_cap then
+            log("[TEST] world Capture error: " .. tostring(err_cap))
+        end
+        addr = twdll.world.GetMemoryAddress()
+    end
+
+    assert_true("world GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
+    log("[TEST] world addr=" .. tostring(addr))
+
+    local count = twdll.world.GetFactionCount()
+    assert_true("GetFactionCount number", type(count) == "number")
+    assert_true("GetFactionCount positive", type(count) == "number" and count > 0)
+    log("[TEST] faction_count=" .. tostring(count))
+
+    local vanilla_count = nil
+    pcall(function()
+        local gi = rawget(_G, "game_interface")
+        if not gi then
+            local scripting = rawget(_G, "EpisodicScripting")
+            if type(scripting) == "table" then gi = scripting.game_interface end
+        end
+        if gi then
+            vanilla_count = gi:model():world():faction_list():num_items()
+        end
+    end)
+    if vanilla_count ~= nil then
+        log("[TEST] vanilla faction_list:num_items()=" .. tostring(vanilla_count))
+        assert_true("GetFactionCount matches vanilla", count == vanilla_count)
+    else
+        log("[TEST] vanilla faction_list unavailable — skipped equality check")
+    end
+
+    summarize("WORLD")
+end
+
+local function run_campaign_ui_tests()
+    log("[TEST] Rome 2 smoke (UICreated / campaign_ui)")
+    assert_true("twdll.campaign_ui table", type(twdll) == "table" and type(twdll.campaign_ui) == "table")
+    assert_true("twdll.campaign_ui.GetMemoryAddress", type(twdll.campaign_ui.GetMemoryAddress) == "function")
+
+    local addr = twdll.campaign_ui.GetMemoryAddress()
+    if type(addr) ~= "string" then
+        log("[TEST] campaign_ui addr nil — ctor likely already ran before hook install")
+    end
+    assert_true("campaign_ui GetMemoryAddress string", type(addr) == "string" and addr:match("^0x"))
+    log("[TEST] campaign_ui addr=" .. tostring(addr))
+
+    summarize("CAMPAIGN_UI")
+end
+
 local function run_uicreated_suites()
     local faction = run_faction_tests()
     run_unit_tests(faction)
@@ -395,6 +466,8 @@ local function run_uicreated_suites()
     run_military_force_tests(faction)
     run_region_tests(faction)
     run_slot_tests(faction)
+    run_world_tests()
+    run_campaign_ui_tests()
 end
 
 local scripting = rawget(_G, "EpisodicScripting")
@@ -412,7 +485,7 @@ if type(scripting) == "table" and type(scripting.AddEventCallBack) == "function"
             summarize("UICREATED")
         end
     end)
-    log("[TEST] faction/unit/character/force/region/slot suites deferred to UICreated")
+    log("[TEST] UICreated suites deferred (faction/unit/character/force/region/slot/world/campaign_ui)")
 else
     log("[TEST] AddEventCallBack unavailable — running suites immediately")
     run_uicreated_suites()
